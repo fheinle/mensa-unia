@@ -5,6 +5,7 @@
 
 import yaml
 from string import Template
+import os
 
 DATA = yaml.load(open('current.yaml', 'r'))
 
@@ -54,5 +55,7 @@ def render():
     return base_template.substitute(title="Mensa Uni", content="\n".join(week))
 
 if __name__ == '__main__':
+    if not os.path.isdir('output'):
+        os.makedirs('output/days')
     output = open('output/mensa.html', 'w')
     output.write(render())
