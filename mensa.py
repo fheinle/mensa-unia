@@ -11,14 +11,6 @@ import re
 
 WEEKDAYS = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag']
 
-ADDITIVES = {
-    1:'mit Farbstoff', 2:'mit Geschmacksverstärker', 3:'mit Konservierungsstoff',
-    4:'mit Antioxidationsmittel', 5:'geschwefelt', 6:'geschwärzt', 7:'gewachst',
-    8:'mit Phosphat', 9:'mit Süßungsmittel', 10:'enthält eine Phenylalaninquelle',
-    11:'kann bei übermäßigem Verkehr abführend wirken', 12:'Schweinefleisch',
-    13:'aus kontrolliert biologischem Anbau', 14:'mit Alkohol', 15:'Rindfleisch',
-    16:'gentechnisch verändert',
-}
 UNI_CURRENT_WEEK = 'http://web.studentenwerk-augsburg.de/verpflegung/_uni-aktuelle-woche.php'
 UNI_NEXT_WEEK = 'http://web.studentenwerk-augsburg.de/verpflegung/_uni-naechste-woche.php'
 
@@ -64,15 +56,26 @@ def _get_dishes_for_day(day_menu):
     '''get a dictionary of dishes from a string that spans a day's menu'''
     dishes_that_day = SPEISE_RE.findall(day_menu)
     dishes = []
+    dish_id = 0
     for dish, price in dishes_that_day:
+        dish_id += 1
         additives = ADDITIVES_RE.findall(dish)
         date = DATE_RE.findall(day_menu)[0].replace('..', '.')
+        if dish.strip().endswith('und'):
+            lines = day_menu.splitlines()
+            for line in lines:
+                if line.strip().startswith(dish):
+                    dish = "%s %s" % (
+                        dish.strip(),
+                        lines[lines.index(line) + 1].strip()
+                    )
         dishes.append({
              'name':replace_umlauts(ADDITIVES_CLEAN_RE.sub('', dish).strip()),
              'price_student':price.split('/')[0].strip(),
              'price_emloyee':price.split('/')[1].strip(),
              'additives':[int(additive) for additive in additives],
              'date':datetime.strptime(date, '%d.%m.%Y'),
+             'id':dish_id,
         })
     return dishes
 
@@ -81,8 +84,8 @@ def get_mensa_schedule(url):
 
     takes different mensa urls (Uni, FH, different weeks, etc)'''
     dishes = {}
+    website_dump = _fetch_mensa_schedule(url)
     for day_of_week in WEEKDAYS:
-        website_dump = _fetch_mensa_schedule(url)
         that_day = _isolate_day(website_dump, day_of_week)
         dishes[day_of_week] = _get_dishes_for_day(that_day)
     return dishes
