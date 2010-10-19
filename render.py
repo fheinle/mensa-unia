@@ -50,8 +50,10 @@ def render_day(weekday):
 def render():
     base_template = Template(open('templates/base.html', 'r').read())
     week = []
+    week.append('<ul data-dividertheme="c" data-theme="d" data-role="listview">')
     for weekday in WEEKDAYS:
         week.append(render_day(weekday))
+    week.append('</ul>')
     return base_template.substitute(title="Mensa Uni", content="\n".join(week))
 
 if __name__ == '__main__':
