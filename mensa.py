@@ -8,6 +8,7 @@ yes this is ugly. Just look at the following imports."""
 from datetime import datetime
 import subprocess
 import re
+import codecs
 
 WEEKDAYS = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag']
 
@@ -37,7 +38,7 @@ def _fetch_mensa_schedule(url):
     yes, we're calling w3m in dump mode instead of parsing HTML
     but they keep changing their unparsable HTML code anyway.'''
     website_dump = subprocess.Popen(
-        ['w3m', '-I iso8859-1', '-O iso-8859-1', '-dump', url],
+        ['w3m', '-I iso8859-1', '-O utf-8', '-dump', url],
         stdout=subprocess.PIPE)
     return website_dump.communicate()[0]
 
@@ -110,9 +111,9 @@ def main():
 
 if __name__ == '__main__':
     import yaml
-    current_file = open('current.yaml', 'w')
+    current_file = codecs.open('current.yaml', 'w', 'iso8859-1')
     current_file.write(yaml.dump(get_mensa_schedule(UNI_CURRENT_WEEK), Dumper=yaml.Dumper))
-    next_file = open('next.yaml', 'w')
+    next_file = codecs.open('next.yaml', 'w', 'iso8859-1')
     next_file.write(yaml.dump(get_mensa_schedule(UNI_NEXT_WEEK), Dumper=yaml.Dumper))
     current_file.close()
     next_file.close()
