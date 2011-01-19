@@ -37,7 +37,7 @@ def _fetch_mensa_schedule(url):
     yes, we're calling w3m in dump mode instead of parsing HTML
     but they keep changing their unparsable HTML code anyway.'''
     website_dump = subprocess.Popen(
-        ['w3m', '-dump', url],
+        ['w3m', '-I iso8859-1', '-O iso-8859-1', '-dump', url],
         stdout=subprocess.PIPE)
     return website_dump.communicate()[0]
 
