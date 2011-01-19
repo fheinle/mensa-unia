@@ -59,5 +59,5 @@ def render():
 if __name__ == '__main__':
     if not os.path.isdir('output'):
         os.makedirs('output/days')
-    output = open('output/mensa.html', 'w')
+    output = open('output/index.html', 'w')
     output.write(render())
