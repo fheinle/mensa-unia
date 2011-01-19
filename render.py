@@ -12,12 +12,12 @@ DATA = yaml.load(open('current.yaml', 'r'))
 WEEKDAYS = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag']
 
 ADDITIVES = {
-    1:'mit Farbstoff', 2:'mit Geschmacksverstärker', 3:'mit Konservierungsstoff',
-    4:'mit Antioxidationsmittel', 5:'geschwefelt', 6:'geschwärzt', 7:'gewachst',
-    8:'mit Phosphat', 9:'mit Süßungsmittel', 10:'enthält eine Phenylalaninquelle',
-    11:'kann bei übermäßigem Verkehr abführend wirken', 12:'Schweinefleisch',
+    1:'mit Farbstoff', 2:'mit Geschmacksverst&auml;rker', 3:'mit Konservierungsstoff',
+    4:'mit Antioxidationsmittel', 5:'geschwefelt', 6:'geschw&auml;rzt', 7:'gewachst',
+    8:'mit Phosphat', 9:'mit S&uuml;&szlig;ungsmittel', 10:'enth&auml;lt eine Phenylalaninquelle',
+    11:'kann bei &uuml;berm&auml;&szlig;igem Verkehr abf&uuml;hrend wirken', 12:'Schweinefleisch',
     13:'aus kontrolliert biologischem Anbau', 14:'mit Alkohol', 15:'Rindfleisch',
-    16:'gentechnisch verändert',
+    16:'gentechnisch ver&auml;ndert',
 }
 def render_day(weekday):
     day_template = Template(open('templates/day.html', 'r').read())
